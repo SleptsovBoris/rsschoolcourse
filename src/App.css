@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+}
+.logo {
+  height: 50px;
+}
+.searchArea {
+  display: inherit;
+  height: 100px;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 200px;
+  background-color: #123882;
+}
+.resultsArea,
+.errorMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
