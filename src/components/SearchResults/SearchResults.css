@@ -1,0 +1,31 @@
+.results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.resultsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+.resultCard {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  color: white;
+  align-items: center;
+  width: 170px;
+  box-sizing: border-box;
+  height: 300px;
+  background-color: #123882;
+  justify-content: space-between;
+}
+.resultCardImg {
+  height: 150px;
+  width: 150px;
+}
+.resultCardTitle {
+  font-size: 20px;
+  font-weight: 500;
+}
