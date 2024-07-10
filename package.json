@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint  --fix",
+    "lint": "eslint src/**/*.{ts,tsx} --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "format:fix": "prettier --write .",
+    "format:fix": "prettier --write 'src/**/*.{ts,tsx}'",
     "prepare": "husky"
   },
   "dependencies": {

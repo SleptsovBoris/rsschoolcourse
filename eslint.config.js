@@ -1,22 +1,18 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import eslintReact from 'eslint-plugin-react';
-import eslintReactHooks from 'eslint-plugin-react-hooks';
-import eslintReactRefresh from 'eslint-plugin-react-refresh';
-import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js';
-import pluginJSXRuntime from 'react/jsx-runtime';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import reactCompiler from 'eslint-plugin-react-compiler';
 
-export default [
+export default tseslint.config(
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     plugins: {
-      '@typescript-eslint': tseslint.plugin,
-      'react-hooks': eslintReactHooks,
-      'react-refresh': eslintReactRefresh,
+      'react-refresh': reactRefresh,
+      'react-compiler': reactCompiler,
     },
-  },
-  {
-    ignores: ['**/node_modules/', '.git/', 'eslint.config.js'],
+    ignores: ['**/node_modules/', '.git/'],
   },
   { files: ['**/*.{ts,tsx}'] },
   { languageOptions: { parserOptions: { ecmaFeatures: { jsx: true } } } },
@@ -26,10 +22,6 @@ export default [
       parserOptions: ['tsconfig.json', 'tsconfig.app.json'],
     },
   },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  pluginReactConfig,
-  pluginJSXRuntime,
   {
     rules: {
       'react-refresh/only-export-components': [
@@ -41,4 +33,4 @@ export default [
       'react/react-in-jsx-scope': 'off',
     },
   },
-];
+);

@@ -5,10 +5,12 @@ import ErrorBoundary from './components/ErrorBoundary';
 import MortyIcon from './assets/morty-svgrepo-com.svg';
 import './App.css';
 import { SearchResult } from './types';
+import Loader from './components/Loader/Loader';
 
 interface AppState {
   results: SearchResult[];
   error: string | null;
+  loading: boolean;
 }
 
 interface AppProps {}
@@ -19,6 +21,7 @@ class App extends Component<AppProps, AppState> {
     this.state = {
       results: [],
       error: null,
+      loading: false,
     };
   }
 
@@ -28,15 +31,16 @@ class App extends Component<AppProps, AppState> {
   }
 
   fetchResults = async (searchTerm: string) => {
+    this.setState({ loading: true });
     try {
       searchTerm = searchTerm.trim();
       const response = await fetch(
         `https://rickandmortyapi.com/api/character/?name=${searchTerm}`,
       );
       const data: { results: SearchResult[] } = await response.json();
-      this.setState({ results: data.results, error: null });
+      this.setState({ results: data.results, error: null, loading: false });
     } catch (error) {
-      this.setState({ error: 'Failed to fetch results' });
+      this.setState({ error: 'Failed to fetch results', loading: false });
       console.error('Fetch error:', error);
     }
   };
@@ -50,7 +54,7 @@ class App extends Component<AppProps, AppState> {
   };
 
   render() {
-    const { results, error } = this.state;
+    const { results, error, loading } = this.state;
 
     return (
       <ErrorBoundary>
@@ -61,7 +65,9 @@ class App extends Component<AppProps, AppState> {
             <button onClick={this.throwError}>Throw Error</button>
           </div>
           <div className="resultsArea">
-            {error ? (
+            {loading ? (
+              <Loader />
+            ) : error ? (
               <p className="errorMessage">{error}</p>
             ) : (
               <SearchResults results={results} />
