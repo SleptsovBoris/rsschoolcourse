@@ -4,29 +4,36 @@ import { SearchResult } from '../../types';
 
 interface SearchResultsProps {
   results: SearchResult[];
+  onItemClick: (id: number) => void;
 }
 
-class SearchResults extends React.Component<SearchResultsProps> {
-  render() {
-    const { results } = this.props;
-    return (
-      <div className="results">
-        <h2>Search Results:</h2>
+const SearchResults: React.FC<SearchResultsProps> = ({
+  results,
+  onItemClick,
+}) => {
+  return (
+    <div className="results">
+      <div className="resultsTitle">Search Results:</div>
+      {results.length === 0 ? (
+        <div className="noResultsMessage">No results found</div>
+      ) : (
         <div className="resultsContainer">
           {results.map((result) => (
-            <div className="resultCard" key={result.id}>
+            <div
+              className="resultCard"
+              key={result.id}
+              onClick={() => onItemClick(result.id)}
+            >
               <img className="resultCardImg" src={result.image} alt="" />
-              <div className="resultCardTitle">{result.name}</div>
-              <div>
-                Status: {result.status}
-                <div>Gender: {result.gender}</div>
+              <div className="resultCardTitle" data-testid="resultCardTitle">
+                {result.name}
               </div>
             </div>
           ))}
         </div>
-      </div>
-    );
-  }
-}
+      )}
+    </div>
+  );
+};
 
 export default SearchResults;
