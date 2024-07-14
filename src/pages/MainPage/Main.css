@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: clamp(320px, 100%, 4096px);
+}
+.logo {
+  height: 50px;
+}
+.searchArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 5px;
+  padding-inline: var(--padding-horizontal);
+  background-color: var(--component-color);
+}
+.contentArea {
+  display: flex;
+  flex-direction: row;
+}
+.detailsArea {
+  display: flex;
+  flex: 1;
+  border-left: 5px solid var(--component-color);
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.closeDetails {
+  background-color: green;
+  width: clamp(10px, 100%, 200px);
+  color: white;
+}
+.resultsArea,
+.errorMessage {
+  padding-inline: var(--padding-horizontal);
+  padding-block: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}

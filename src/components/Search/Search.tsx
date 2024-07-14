@@ -1,50 +1,34 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './Search.css';
+import useSearchTerm from '../Hooks/useSearchTerm';
 
 interface SearchProps {
   onSearch: (term: string) => void;
 }
 
-interface SearchState {
-  searchTerm: string;
-}
+const Search: React.FC<SearchProps> = ({ onSearch }) => {
+  const [searchTerm, setSearchTerm] = useSearchTerm();
 
-class Search extends Component<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
-    this.state = { searchTerm: '' };
-  }
-
-  componentDidMount() {
-    const savedTerm = localStorage.getItem('searchTerm');
-    if (savedTerm) {
-      this.setState({ searchTerm: savedTerm });
-    }
-  }
-
-  handleSearch = () => {
-    const trimmedTerm = this.state.searchTerm.trim();
-    localStorage.setItem('searchTerm', trimmedTerm);
-    this.props.onSearch(trimmedTerm);
+  const handleSearch = () => {
+    const trimmedTerm = searchTerm.trim();
+    onSearch(trimmedTerm);
   };
 
-  handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ searchTerm: event.target.value });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
-  render() {
-    return (
-      <div className="search">
-        <input
-          className="searchInput"
-          type="text"
-          value={this.state.searchTerm}
-          onChange={this.handleChange}
-        />
-        <button onClick={this.handleSearch}>Search</button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="search">
+      <input
+        className="searchInput"
+        type="text"
+        value={searchTerm}
+        onChange={handleChange}
+      />
+      <button onClick={handleSearch}>Search</button>
+    </div>
+  );
+};
 
 export default Search;
