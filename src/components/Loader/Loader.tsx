@@ -3,8 +3,8 @@ import './Loader.css';
 
 const Loader: React.FC = () => {
   return (
-    <div className="loaderWrapper">
-      <img src={loader} className="loaderImg" alt="" />;
+    <div data-testid="Loader" className="loaderWrapper">
+      <img src={loader} className="loaderImg" alt="" />
     </div>
   );
 };

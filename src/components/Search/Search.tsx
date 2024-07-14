@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Search.css';
 import useSearchTerm from '../Hooks/useSearchTerm';
 
@@ -8,14 +8,16 @@ interface SearchProps {
 
 const Search: React.FC<SearchProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useSearchTerm();
+  const [tempSearchTerm, setTempSearchTerm] = useState<string>(searchTerm);
 
   const handleSearch = () => {
-    const trimmedTerm = searchTerm.trim();
+    const trimmedTerm = tempSearchTerm.trim();
+    setSearchTerm(trimmedTerm);
     onSearch(trimmedTerm);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
+    setTempSearchTerm(event.target.value);
   };
 
   return (
@@ -23,7 +25,7 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
       <input
         className="searchInput"
         type="text"
-        value={searchTerm}
+        value={tempSearchTerm}
         onChange={handleChange}
       />
       <button onClick={handleSearch}>Search</button>

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import './Details.css';
 import { SearchResult } from '../../types';
+import useQuery from '../Hooks/useQuery';
 
 const Details: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState<SearchResult>();
+  const query = useQuery();
+  const navigate = useNavigate();
+  const currentPage = parseInt(query.get('page') || '1', 10);
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -32,10 +36,17 @@ const Details: React.FC = () => {
     return <Loader />;
   }
 
+  const handleCloseDetails = () => {
+    navigate(`/?page=${currentPage}`);
+  };
+
   return (
     <>
       {details ? (
         <div className="details">
+          <button className="closeDetails" onClick={handleCloseDetails}>
+            Close Details
+          </button>
           <div className="detailsTitle">{details.name}</div>
           <div>
             Status: <b>{details.status}</b>{' '}

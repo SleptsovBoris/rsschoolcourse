@@ -6,12 +6,9 @@ import MortyIcon from '../../assets/morty-svgrepo-com.svg';
 import Loader from '../../components/Loader/Loader';
 import SearchResults from '../../components/SearchResults/SearchResults';
 import './Main.css';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Pagination from '../../components/Pagination/Pagination';
-
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search);
-};
+import useQuery from '../../components/Hooks/useQuery';
 
 const MainPage: React.FC = () => {
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -95,9 +92,6 @@ const MainPage: React.FC = () => {
         </div>
         {detailsId ? (
           <div className="detailsArea">
-            <button className="closeDetails" onClick={handleCloseDetails}>
-              Close Details
-            </button>
             <Outlet />
           </div>
         ) : (

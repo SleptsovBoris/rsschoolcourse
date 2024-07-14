@@ -16,7 +16,6 @@
 }
 .contentArea {
   display: flex;
-  flex-direction: row;
 }
 .detailsArea {
   display: flex;
