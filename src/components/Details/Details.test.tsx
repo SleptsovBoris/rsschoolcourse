@@ -1,10 +1,17 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import Details from './Details';
-import { SearchResult } from '../../types';
+import { ICharacter } from '../../types';
+import characterDetailsReducer, {
+  setCurrentDetails,
+  setIsLoading,
+} from '../../store/reducers/DetailsSlice';
+import { characterAPI } from '../../services/CharacterService';
 
-const mockCharacter: SearchResult = {
+const mockCharacter: ICharacter = {
   id: 1,
   name: 'Rick Sanchez',
   status: 'Alive',
@@ -15,55 +22,96 @@ const mockCharacter: SearchResult = {
   image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
 };
 
-const mockFetch = () => {
-  return Promise.resolve({
-    ok: true,
-    status: 200,
-    statusText: 'OK',
-    headers: new Headers(),
-    redirected: false,
-    type: 'basic',
-    url: '',
-    clone: () => this as unknown as Response,
-    body: null,
-    bodyUsed: false,
-    arrayBuffer: () => Promise.resolve(new ArrayBuffer(0)),
-    blob: () => Promise.resolve(new Blob()),
-    formData: () => Promise.resolve(new FormData()),
-    json: () => Promise.resolve(mockCharacter),
-    text: () => Promise.resolve(''),
-  } as unknown as Response);
-};
+const store = configureStore({
+  reducer: {
+    characterDetails: characterDetailsReducer,
+    [characterAPI.reducerPath]: characterAPI.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(characterAPI.middleware),
+});
 
 describe('Details Component', () => {
   beforeEach(() => {
-    vi.spyOn(globalThis, 'fetch').mockImplementation(mockFetch);
+    store.dispatch(setIsLoading(false));
+    store.dispatch(setCurrentDetails(null));
   });
 
   it('should display a loading indicator while fetching data', async () => {
+    store.dispatch(setIsLoading(true));
+
     render(
-      <BrowserRouter>
-        <Details />
-      </BrowserRouter>,
+      <Provider store={store}>
+        <BrowserRouter>
+          <Details />
+        </BrowserRouter>
+      </Provider>,
     );
-    await expect(screen.getByTestId('Loader')).toBeInTheDocument();
+
+    expect(screen.getByTestId('Loader')).toBeInTheDocument();
   });
 
   it('should correctly display the detailed card data', async () => {
-    render(
-      <MemoryRouter initialEntries={['/character/1']}>
-        <Routes>
-          <Route path="/character/:id" element={<Details />} />
-        </Routes>
-      </MemoryRouter>,
-    );
+    store.dispatch(setIsLoading(false));
+    store.dispatch(setCurrentDetails(mockCharacter));
 
-    await waitFor(() =>
-      expect(screen.getByText('Rick Sanchez')).toBeInTheDocument(),
+    render(
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/details/1']}>
+          <Routes>
+            <Route path="/details/:id" element={<Details />} />
+          </Routes>
+        </MemoryRouter>
+      </Provider>,
     );
-    expect(screen.getByText(/Status:/i)).toHaveTextContent('Status: Alive');
-    expect(screen.getByText(/Species:/i)).toHaveTextContent('Species: Human');
-    expect(screen.getByText(/Gender:/i)).toHaveTextContent('Gender: Male');
-    expect(screen.getByAltText('Rick Sanchez')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(mockCharacter.name)).toBeInTheDocument();
+      expect(screen.getByText(/Status:/i)).toHaveTextContent(
+        `Status: ${mockCharacter.status}`,
+      );
+      expect(screen.getByText(/Species:/i)).toHaveTextContent(
+        `Species: ${mockCharacter.species}`,
+      );
+      expect(screen.getByText(/Gender:/i)).toHaveTextContent(
+        `Gender: ${mockCharacter.gender}`,
+      );
+      expect(screen.getByAltText(mockCharacter.name)).toBeInTheDocument();
+    });
   });
+
+  // it('should display an error message when there is an error', async () => {
+  //   render(
+  //     <Provider store={store}>
+  //       <MemoryRouter initialEntries={['/details/1']}>
+  //         <Routes>
+  //           <Route path="/details/:id" element={<Details />} />
+  //         </Routes>
+  //       </MemoryRouter>
+  //     </Provider>,
+  //   );
+
+  //   await waitFor(() =>
+  //     expect(
+  //       screen.getByText('Произошла ошибка при загрузке'),
+  //     ).toBeInTheDocument(),
+  //   );
+  // });
+
+  // it('should display when no data is available', async () => {
+  //   store.dispatch(setCurrentDetails(null));
+
+  //   render(
+  //     <Provider store={store}>
+  //       <MemoryRouter initialEntries={['/details/2']}>
+  //         <Routes>
+  //           <Route path="/details/:id" element={<Details />} />
+  //         </Routes>
+  //       </MemoryRouter>
+  //     </Provider>,
+  //   );
+
+  //   await waitFor(() =>
+  //     expect(screen.getByText('Нет данных')).toBeInTheDocument(),
+  //   );
+  // });
 });

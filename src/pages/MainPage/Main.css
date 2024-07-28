@@ -1,6 +1,8 @@
 .container {
   display: flex;
+  min-height: 100vh;
   flex-direction: column;
+  background-color: var(--bg-color);
   width: clamp(320px, 100%, 4096px);
 }
 .logo {
@@ -25,15 +27,11 @@
   align-items: center;
   padding: 20px;
 }
-.closeDetails {
-  background-color: green;
-  width: clamp(10px, 100%, 200px);
-  color: white;
-}
 .resultsArea,
 .errorMessage {
   padding-inline: var(--padding-horizontal);
   padding-block: 20px;
+  color: var(--text-color);
   box-sizing: border-box;
   display: flex;
   flex: 2;

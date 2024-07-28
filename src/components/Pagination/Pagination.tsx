@@ -1,18 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Pagination.css';
+import { useAppSelector } from '../../hooks/redux';
+import { useDispatch } from 'react-redux';
+import { setCharacters } from '../../store/reducers/CharactersSlice';
 
-interface PaginationProps {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (pageNumber: number) => void;
-}
+const Pagination: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { currentPage, totalPages } = useAppSelector(
+    (state) => state.characters,
+  );
 
-const Pagination: React.FC<PaginationProps> = ({
-  currentPage,
-  totalPages,
-  onPageChange,
-}) => {
   const MAX_PAGES = 5;
   const pages = [];
 
@@ -27,17 +26,30 @@ const Pagination: React.FC<PaginationProps> = ({
     pages.push(i);
   }
 
+  const handlePageChange = (page: number) => {
+    dispatch(setCharacters({ characters: [], currentPage: page, totalPages }));
+    navigate(`/?page=${page}`);
+  };
+
   return (
     <div className="pagination">
       {currentPage > 1 && (
-        <Link to={`/?page=${currentPage - 1}`} className="arrow-link">
+        <Link
+          to={`/?page=${currentPage - 1}`}
+          className="arrow-link"
+          onClick={() => handlePageChange(currentPage - 1)}
+        >
           {'<'}
         </Link>
       )}
 
       {startPage > 1 && (
         <>
-          <Link to={`/?page=1`} className="link">
+          <Link
+            to={`/?page=1`}
+            className="link"
+            onClick={() => handlePageChange(1)}
+          >
             1
           </Link>
           {startPage > 2 && <span className="dots">...</span>}
@@ -49,7 +61,7 @@ const Pagination: React.FC<PaginationProps> = ({
           key={page}
           to={`/?page=${page}`}
           className={page === currentPage ? 'activeLink' : 'link'}
-          onClick={() => onPageChange(page)} // Добавлен вызов onPageChange
+          onClick={() => handlePageChange(page)}
         >
           {page}
         </Link>
@@ -58,14 +70,22 @@ const Pagination: React.FC<PaginationProps> = ({
       {endPage < totalPages && (
         <>
           {endPage < totalPages - 1 && <span className="dots">...</span>}
-          <Link to={`/?page=${totalPages}`} className="link">
+          <Link
+            to={`/?page=${totalPages}`}
+            className="link"
+            onClick={() => handlePageChange(totalPages)}
+          >
             {totalPages}
           </Link>
         </>
       )}
 
       {currentPage < totalPages && (
-        <Link to={`/?page=${currentPage + 1}`} className="arrow-link">
+        <Link
+          to={`/?page=${currentPage + 1}`}
+          className="arrow-link"
+          onClick={() => handlePageChange(currentPage + 1)}
+        >
           {'>'}
         </Link>
       )}
