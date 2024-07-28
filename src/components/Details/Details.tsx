@@ -1,72 +1,72 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import './Details.css';
-import { SearchResult } from '../../types';
-import useQuery from '../Hooks/useQuery';
+import useQuery from '../../hooks/useQuery';
+import { characterAPI } from '../../services/CharacterService';
+import { useDispatch } from 'react-redux';
+import {
+  setCurrentDetails,
+  setIsLoading,
+} from '../../store/reducers/DetailsSlice';
+import { useAppSelector } from '../../hooks/redux';
 
 const Details: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [loading, setLoading] = useState(true);
-  const [details, setDetails] = useState<SearchResult>();
   const query = useQuery();
   const navigate = useNavigate();
   const currentPage = parseInt(query.get('page') || '1', 10);
+  const dispatch = useDispatch();
+  const currentDetails = useAppSelector(
+    (state) => state.characterDetails.currentDetails,
+  );
+  const { data, error, isLoading } = characterAPI.useFetchCharacterDetailsQuery(
+    { id: id },
+  );
 
   useEffect(() => {
-    const fetchDetails = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `https://rickandmortyapi.com/api/character/${id}`,
-        );
-        const data = await response.json();
-        setDetails(data);
-      } catch (error) {
-        console.error('Failed to fetch details:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDetails();
-  }, [id]);
-
-  if (loading) {
-    return <Loader />;
-  }
+    dispatch(setIsLoading(isLoading));
+    if (data) {
+      dispatch(setCurrentDetails(data));
+    }
+  }, [data, isLoading, dispatch]);
 
   const handleCloseDetails = () => {
     navigate(`/?page=${currentPage}`);
+    dispatch(setCurrentDetails(null));
   };
 
   return (
     <>
-      {details ? (
+      {isLoading ? (
+        <Loader />
+      ) : error ? (
+        <h1>Произошла ошибка при загрузке</h1>
+      ) : currentDetails ? (
         <div className="details">
           <button className="closeDetails" onClick={handleCloseDetails}>
             Close Details
           </button>
-          <div className="detailsTitle">{details.name}</div>
+          <div className="detailsTitle">{currentDetails.name}</div>
           <div>
-            Status: <b>{details.status}</b>{' '}
+            Status: <b>{currentDetails.status}</b>{' '}
           </div>
           <div>
-            Species: <b>{details.species}</b>
+            Species: <b>{currentDetails.species}</b>
           </div>
           <div>
-            Type: <b>{details.type}</b>
+            Type: <b>{currentDetails.type}</b>
           </div>
           <div>
-            Gender: <b>{details.gender}</b>
+            Gender: <b>{currentDetails.gender}</b>
           </div>
           <div>
-            Created: <b>{details.created}</b>
+            Created: <b>{currentDetails.created}</b>
           </div>
-          <img src={details.image} alt={details.name} />
+          <img src={currentDetails.image} alt={currentDetails.name} />
         </div>
       ) : (
-        <p>No details found</p>
+        <h1>Нет данных</h1>
       )}
     </>
   );

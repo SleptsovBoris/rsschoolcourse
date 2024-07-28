@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { SearchResult, ApiResponse } from '../../types';
-import useSearchTerm from '../../components/Hooks/useSearchTerm';
+import React, { useEffect } from 'react';
+import useSearchTerm from '../../hooks/useSearchTerm';
 import Search from '../../components/Search/Search';
 import MortyIcon from '../../assets/morty-svgrepo-com.svg';
 import Loader from '../../components/Loader/Loader';
@@ -8,85 +7,63 @@ import SearchResults from '../../components/SearchResults/SearchResults';
 import './Main.css';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Pagination from '../../components/Pagination/Pagination';
-import useQuery from '../../components/Hooks/useQuery';
+import useQuery from '../../hooks/useQuery';
+import { characterAPI } from '../../services/CharacterService';
+import FlyoutBar from '../../components/FlyoutBar/FlyoutBar';
+import ThemeSwitcher from '../../components/ThemeProvider/ThemeSwitcher';
+import useTheme from '../../hooks/useTheme';
+import { setCharacters } from '../../store/reducers/CharactersSlice';
+import { useDispatch } from 'react-redux';
 
 const MainPage: React.FC = () => {
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useSearchTerm();
-  const [totalPages, setTotalPages] = useState<number>(1);
   const query = useQuery();
   const navigate = useNavigate();
   const currentPage = parseInt(query.get('page') || '1', 10);
   const detailsId = query.get('details');
+  const { data, error, isLoading } = characterAPI.useSearchCharactersQuery({
+    name: searchTerm,
+    page: currentPage,
+  });
+
+  const { theme } = useTheme();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    fetchResults(searchTerm, currentPage);
-  }, [searchTerm, currentPage]);
-
-  const fetchResults = async (searchTerm: string, page: number) => {
-    setLoading(true);
-    try {
-      searchTerm = searchTerm.trim();
-      const response = await fetch(
-        `https://rickandmortyapi.com/api/character/?name=${searchTerm}&page=${page}`,
+    if (data) {
+      dispatch(
+        setCharacters({
+          characters: data.results,
+          currentPage,
+          totalPages: data.info.pages,
+        }),
       );
-      const data: ApiResponse = await response.json();
-      setResults(data.results);
-      setTotalPages(data.info.pages);
-      setError(null);
-    } catch (error) {
-      setError('Failed to fetch results');
-      console.error('Fetch error:', error);
-    } finally {
-      setLoading(false);
     }
-  };
+  }, [data, currentPage, dispatch]);
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
     navigate(`/?page=1`);
-    fetchResults(term, 1);
-  };
-
-  const handleItemClick = (id: number) => {
-    navigate(`/details/${id}?page=${currentPage}&details=${id}`);
-  };
-
-  const handlePageChange = (pageNumber: number) => {
-    navigate(`/?page=${pageNumber}`);
-  };
-
-  const handleCloseDetails = () => {
-    navigate(`/?page=${currentPage}`);
   };
 
   return (
-    <div className="container">
+    <div className={`container ${theme}`}>
       <div className="searchArea">
         <img className="logo" src={MortyIcon} alt="" />
         <Search onSearch={handleSearch} />
+        <ThemeSwitcher />
       </div>
       <div className="contentArea">
-        <div
-          className="resultsArea"
-          onClick={detailsId ? handleCloseDetails : () => {}}
-        >
-          {loading ? (
-            <Loader />
-          ) : error ? (
-            <p className="errorMessage">{error}</p>
-          ) : (
+        <div className="resultsArea">
+          {isLoading && <Loader />}
+          {error && (
+            <p className="errorMessage">Произошла ошибка при загрузке</p>
+          )}
+          {!error && !isLoading && data && (
             <>
-              <SearchResults results={results} onItemClick={handleItemClick} />
-              {results.length > 0 && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                />
-              )}
+              {data.results.length > 0 && <Pagination />}
+              <SearchResults />
+              <FlyoutBar />
             </>
           )}
         </div>

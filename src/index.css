@@ -13,7 +13,32 @@
   -moz-osx-font-smoothing: grayscale;
 
   --padding-horizontal: 100px;
-  --component-color: #123882;
+
+  --component-color-light: #123882;
+  --active-component-color: green;
+
+  --bg-color-light: #edeef0;
+  --bg-color-dark: #181818;
+
+  --text-color-light: #181818;
+  --text-color-dark: #edeef0;
+
+  --toggler-color-light: green;
+  --toggler-color-dark: #edeef0;
+}
+
+.light {
+  --bg-color: var(--bg-color-light);
+  --text-color: var(--text-color-light);
+  --component-color: var(--component-color-light);
+  --toggler-color: var(--toggler-color-light);
+}
+
+.dark {
+  --bg-color: var(--bg-color-dark);
+  --text-color: var(--text-color-dark);
+  --component-color: var(--component-color-light);
+  --toggler-color: var(--toggler-color-dark);
 }
 
 * {

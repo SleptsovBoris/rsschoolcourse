@@ -1,36 +1,36 @@
 import { render, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Pagination from './Pagination';
-import { expect, it, describe, beforeEach, vi } from 'vitest';
+import { expect, it, describe, beforeEach } from 'vitest';
+import { store } from '../../store/store';
+import { Provider } from 'react-redux';
+import { setCharacters } from '../../store/reducers/CharactersSlice';
 
 describe('Pagination Component', () => {
-  const onPageChange = vi.fn();
-
   beforeEach(() => {
-    onPageChange.mockClear();
+    store.dispatch(
+      setCharacters({ characters: [], currentPage: 1, totalPages: 2 }),
+    );
   });
 
-  const renderComponent = (currentPage: number, totalPages: number) => {
+  const renderComponent = () => {
     return render(
-      <MemoryRouter initialEntries={[`/?page=${currentPage}`]}>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={onPageChange}
-        />
-      </MemoryRouter>,
+      <Provider store={store}>
+        <MemoryRouter initialEntries={['/?page=1']}>
+          <Pagination />
+        </MemoryRouter>
+      </Provider>,
     );
   };
 
-  it('should update URL query parameter when page changes', () => {
-    const { container } = renderComponent(1, 10);
-
+  it('should update URL query parameter and call handlePageChange when page changes', () => {
+    const { container } = renderComponent();
     const secondPageLink = container.querySelector('a[href="/?page=2"]');
     expect(secondPageLink).toBeInTheDocument();
     if (secondPageLink) {
       fireEvent.click(secondPageLink);
     }
-
-    expect(onPageChange).toHaveBeenCalledWith(2);
+    const { currentPage } = store.getState().characters;
+    expect(currentPage).toBe(2);
   });
 });

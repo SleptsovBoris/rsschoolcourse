@@ -1,4 +1,4 @@
-export interface SearchResult {
+export interface ICharacter {
   id: number;
   name: string;
   status: string;
@@ -16,5 +16,5 @@ export interface ApiResponse {
     next: string | null;
     prev: string | null;
   };
-  results: SearchResult[];
+  results: ICharacter[];
 }

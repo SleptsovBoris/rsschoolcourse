@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Search.css';
-import useSearchTerm from '../Hooks/useSearchTerm';
+import useSearchTerm from '../../hooks/useSearchTerm';
 
 interface SearchProps {
   onSearch: (term: string) => void;
@@ -28,7 +28,9 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
         value={tempSearchTerm}
         onChange={handleChange}
       />
-      <button onClick={handleSearch}>Search</button>
+      <button className="searchButton" onClick={handleSearch}>
+        Search
+      </button>
     </div>
   );
 };
