@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ICharacter } from '../../types';
+import { ICharacter } from '../../types/types';
 
 export interface CharacterDetailsState {
   currentDetails: ICharacter | null;

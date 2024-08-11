@@ -3,6 +3,7 @@ import { characterAPI } from '../services/CharacterService';
 import selectedCharactersReducer from './reducers/SelectedCharactersSlice';
 import characterDetailsReducer from './reducers/DetailsSlice';
 import charactersReducer from './reducers/CharactersSlice';
+import { createWrapper } from 'next-redux-wrapper';
 
 export const store = configureStore({
   reducer: {
@@ -17,3 +18,6 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const makeStore = () => store;
+export const wrapper = createWrapper(makeStore, { debug: true });

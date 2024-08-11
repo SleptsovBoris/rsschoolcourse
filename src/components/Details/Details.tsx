@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
-import './Details.css';
-import useQuery from '../../hooks/useQuery';
+import styles from './Details.module.css';
 import { characterAPI } from '../../services/CharacterService';
 import { useDispatch } from 'react-redux';
 import {
@@ -10,18 +8,19 @@ import {
   setIsLoading,
 } from '../../store/reducers/DetailsSlice';
 import { useAppSelector } from '../../hooks/redux';
+import { useRouter } from 'next/router';
 
 const Details: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const query = useQuery();
-  const navigate = useNavigate();
-  const currentPage = parseInt(query.get('page') || '1', 10);
+  const { query } = useRouter();
+  const router = useRouter();
+  const { id } = router.query;
+  const currentPage = parseInt((query.page as string) || '1', 10);
   const dispatch = useDispatch();
   const currentDetails = useAppSelector(
     (state) => state.characterDetails.currentDetails,
   );
   const { data, error, isLoading } = characterAPI.useFetchCharacterDetailsQuery(
-    { id: id },
+    { id: id as string },
   );
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const Details: React.FC = () => {
   }, [data, isLoading, dispatch]);
 
   const handleCloseDetails = () => {
-    navigate(`/?page=${currentPage}`);
+    router.push(`/?page=${currentPage}&name=${router.query.name}`);
     dispatch(setCurrentDetails(null));
   };
 
@@ -43,11 +42,11 @@ const Details: React.FC = () => {
       ) : error ? (
         <h1>Произошла ошибка при загрузке</h1>
       ) : currentDetails ? (
-        <div className="details">
-          <button className="closeDetails" onClick={handleCloseDetails}>
+        <div className={styles.details}>
+          <button className={styles.closeDetails} onClick={handleCloseDetails}>
             Close Details
           </button>
-          <div className="detailsTitle">{currentDetails.name}</div>
+          <div className={styles.detailsTitle}>{currentDetails.name}</div>
           <div>
             Status: <b>{currentDetails.status}</b>{' '}
           </div>

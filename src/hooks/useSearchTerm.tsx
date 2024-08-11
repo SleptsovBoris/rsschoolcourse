@@ -1,13 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 const useSearchTerm = () => {
-  const [searchTerm, setSearchTerm] = useState(() => {
-    const savedTerm = localStorage.getItem('searchTerm');
-    return savedTerm !== null ? savedTerm : '';
-  });
+  const router = useRouter();
+  const searchTerm = (router.query.name as string) || '';
+
+  const setSearchTerm = (newTerm: string) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, name: newTerm || undefined, page: '1' },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
 
   useEffect(() => {
-    localStorage.setItem('searchTerm', searchTerm.trim());
+    if (!searchTerm && typeof window !== 'undefined') {
+      setSearchTerm('');
+    }
   }, [searchTerm]);
 
   return [searchTerm, setSearchTerm] as const;

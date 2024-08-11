@@ -23,9 +23,9 @@
         </h1>
         <div class="clearfix">
           <div class="fl pad1y space-right2">
-            <span class="strong">92.06% </span>
+            <span class="strong">91.93% </span>
             <span class="quiet">Statements</span>
-            <span class="fraction">58/63</span>
+            <span class="fraction">57/62</span>
           </div>
 
           <div class="fl pad1y space-right2">
@@ -41,9 +41,9 @@
           </div>
 
           <div class="fl pad1y space-right2">
-            <span class="strong">92.06% </span>
+            <span class="strong">91.93% </span>
             <span class="quiet">Lines</span>
-            <span class="fraction">58/63</span>
+            <span class="fraction">57/62</span>
           </div>
         </div>
         <p class="quiet">
@@ -133,10 +133,7 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -146,36 +143,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -204,16 +202,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
-import './Details.css';
-import useQuery from '../../hooks/useQuery';
+import styles from './Details.module.css';
 import { characterAPI } from '../../services/CharacterService';
 import { useDispatch } from 'react-redux';
 import {
@@ -221,18 +217,19 @@ import {
   setIsLoading,
 } from '../../store/reducers/DetailsSlice';
 import { useAppSelector } from '../../hooks/redux';
+import { useRouter } from 'next/router';
 &nbsp;
 const Details: React.FC = () =&gt; {
-  const { id } = useParams&lt;{ id: string }&gt;();
-  const query = useQuery();
-  const navigate = useNavigate();
-  const currentPage = parseInt(query.get('page') || '1', 10);
+  const { query } = useRouter();
+  const router = useRouter();
+  const { id } = router.query;
+  const currentPage = parseInt((query.page as string) || '1', 10);
   const dispatch = useDispatch();
   const currentDetails = useAppSelector(
     (state) =&gt; state.characterDetails.currentDetails,
   );
   const { data, error, isLoading } = characterAPI.useFetchCharacterDetailsQuery(
-    { id: id },
+    { id: id as string },
   );
 &nbsp;
   useEffect(() =&gt; {
@@ -243,7 +240,7 @@ const Details: React.FC = () =&gt; {
   }, [data, isLoading, dispatch]);
 &nbsp;
   const handleCloseDetails = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    navigate(`/?page=${currentPage}`);</span>
+<span class="cstat-no" title="statement not covered" >    router.push(`/?page=${currentPage}&amp;name=${router.query.name}`);</span>
 <span class="cstat-no" title="statement not covered" >    dispatch(setCurrentDetails(null));</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
 &nbsp;
@@ -254,11 +251,11 @@ const Details: React.FC = () =&gt; {
       ) : <span class="branch-0 cbranch-no" title="branch not covered" >error ? (</span>
 <span class="cstat-no" title="statement not covered" >        &lt;h1&gt;Произошла ошибка при загрузке&lt;/h1&gt;</span>
       ) : currentDetails ? (
-        &lt;div className="details"&gt;
-          &lt;button className="closeDetails" onClick={handleCloseDetails}&gt;
+        &lt;div className={styles.details}&gt;
+          &lt;button className={styles.closeDetails} onClick={handleCloseDetails}&gt;
             Close Details
           &lt;/button&gt;
-          &lt;div className="detailsTitle"&gt;{currentDetails.name}&lt;/div&gt;
+          &lt;div className={styles.detailsTitle}&gt;{currentDetails.name}&lt;/div&gt;
           &lt;div&gt;
             Status: &lt;b&gt;{currentDetails.status}&lt;/b&gt;{' '}
           &lt;/div&gt;
@@ -298,7 +295,7 @@ export default Details;
         rel="noopener noreferrer"
         >istanbul</a
       >
-      at 2024-07-28T23:31:55.575Z
+      at 2024-08-11T21:45:13.321Z
     </div>
     <script src="../../prettify.js"></script>
     <script>
