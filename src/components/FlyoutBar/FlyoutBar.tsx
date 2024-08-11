@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../hooks/redux';
 import { unselectAllCharacters } from '../../store/reducers/SelectedCharactersSlice';
-import './FlyoutBar.css';
+import styles from './FlyoutBar.module.css';
 
 const FlyoutBar: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,11 +35,15 @@ const FlyoutBar: React.FC = () => {
 
   if (selectedCharacters.length > 0) {
     return (
-      <div className="flyout">
-        <button onClick={handleUnselectAll}>Unselect all</button>
-        <p>{selectedCharacters.length} items are selected</p>
+      <div className={styles.flyout}>
+        <button className={styles.flyoutButton} onClick={handleUnselectAll}>
+          Unselect all
+        </button>
+        <p className={styles.flyoutP}>
+          {selectedCharacters.length} items are selected
+        </p>
         <a
-          className="flyout-download"
+          className={styles.flyoutDownload}
           href={handleDownload()}
           download={`${selectedCharacters.length}_selectedCharacters.csv`}
         >

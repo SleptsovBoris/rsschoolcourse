@@ -1,17 +1,17 @@
 import React from 'react';
-import './SearchResults.css';
-import { ICharacter } from '../../types';
+import styles from './SearchResults.module.css';
+import { ICharacter } from '../../types/types';
 import { useAppSelector } from '../../hooks/redux';
 import {
   selectCharacter,
   unselectCharacter,
 } from '../../store/reducers/SelectedCharactersSlice';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 const SearchResults: React.FC = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { characters, currentPage } = useAppSelector(
     (state) => state.characters,
   );
@@ -20,7 +20,9 @@ const SearchResults: React.FC = () => {
   );
 
   const handleItemClick = (id: number) => {
-    navigate(`/details/${id}?page=${currentPage}&details=${id}`);
+    router.push(
+      `/details/${id}?page=${currentPage}&details=${id}&name=${router.query.name}`,
+    );
   };
 
   const isSelected = (id: number) => {
@@ -36,28 +38,35 @@ const SearchResults: React.FC = () => {
   };
 
   return (
-    <div className="results">
-      <div className="resultsTitle">Search Results:</div>
+    <div className={styles.results}>
+      <div className={styles.resultsTitle}>Search Results:</div>
       {characters.length === 0 ? (
-        <div className="noResultsMessage">No results found</div>
+        <div className={styles.resultsTitle}>No results found</div>
       ) : (
-        <div className="resultsContainer">
+        <div className={styles.resultsContainer}>
           {characters.map((character) => (
-            <div className="resultCard" key={character.id}>
-              <img className="resultCardImg" src={character.image} alt="" />
-              <div className="resultCardTitle" data-testid="resultCardTitle">
+            <div className={styles.resultCard} key={character.id}>
+              <img
+                className={styles.resultCardImg}
+                src={character.image}
+                alt=""
+              />
+              <div
+                className={styles.resultCardTitle}
+                data-testid="resultCardTitle"
+              >
                 {character.name}
               </div>
-              <div className="resultCardInteractiveSection">
+              <div className={styles.resultCardInteractiveSection}>
                 <input
-                  className="resultCardCheckbox"
+                  className={styles.resultCardCheckbox}
                   type="checkbox"
                   checked={isSelected(character.id)}
                   onChange={() => handleSelectToggle(character)}
                 />
 
                 <button
-                  className="resultCardOpenDetailsButton"
+                  className={styles.resultCardOpenDetailsButton}
                   onClick={() => handleItemClick(character.id)}
                 >
                   Open Details

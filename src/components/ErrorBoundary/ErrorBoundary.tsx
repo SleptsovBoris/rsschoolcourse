@@ -1,3 +1,4 @@
+import React from 'react';
 import { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
@@ -21,8 +22,7 @@ class ErrorBoundary extends Component<Props, State> {
     console.error('Uncaught error:', error, errorInfo);
   }
 
-  public clearLocalStorageSearch = () => {
-    localStorage.setItem('searchTerm', '');
+  public handleRetry = () => {
     location.reload();
   };
 
@@ -41,7 +41,7 @@ class ErrorBoundary extends Component<Props, State> {
           }}
         >
           <h1 style={{ color: 'white' }}>Error, check console for more info</h1>
-          <button onClick={this.clearLocalStorageSearch}>Retry Search</button>
+          <button onClick={this.handleRetry}>Retry Search</button>
         </div>
       );
     }

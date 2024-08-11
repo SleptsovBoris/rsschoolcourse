@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import './Search.css';
+import React, { useState, useEffect } from 'react';
+import styles from './Search.module.css';
 import useSearchTerm from '../../hooks/useSearchTerm';
 
 interface SearchProps {
@@ -9,6 +9,10 @@ interface SearchProps {
 const Search: React.FC<SearchProps> = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useSearchTerm();
   const [tempSearchTerm, setTempSearchTerm] = useState<string>(searchTerm);
+
+  useEffect(() => {
+    setTempSearchTerm(searchTerm);
+  }, [searchTerm]);
 
   const handleSearch = () => {
     const trimmedTerm = tempSearchTerm.trim();
@@ -20,15 +24,23 @@ const Search: React.FC<SearchProps> = ({ onSearch }) => {
     setTempSearchTerm(event.target.value);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
-    <div className="search">
+    <div className={styles.search}>
       <input
-        className="searchInput"
+        className={styles.searchInput}
         type="text"
+        placeholder="Search ..."
         value={tempSearchTerm}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
       />
-      <button className="searchButton" onClick={handleSearch}>
+      <button className={styles.searchButton} onClick={handleSearch}>
         Search
       </button>
     </div>

@@ -1,10 +1,18 @@
-import loader from '../../assets/loading-svgrepo-com.svg';
-import './Loader.css';
+import React from 'react';
+import styles from './Loader.module.css';
 
 const Loader: React.FC = () => {
   return (
-    <div data-testid="Loader" className="loaderWrapper">
-      <img src={loader} className="loaderImg" alt="" />
+    <div
+      data-testid="Loader"
+      className={styles.loaderWrapper}
+      suppressHydrationWarning={true}
+    >
+      <img
+        src="/images/loading-icon.svg"
+        className={styles.loaderImg}
+        alt="Loading..."
+      />
     </div>
   );
 };

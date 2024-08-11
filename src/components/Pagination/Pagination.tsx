@@ -1,13 +1,14 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './Pagination.css';
+import styles from './Pagination.module.css';
 import { useAppSelector } from '../../hooks/redux';
 import { useDispatch } from 'react-redux';
 import { setCharacters } from '../../store/reducers/CharactersSlice';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const Pagination: React.FC = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter();
   const { currentPage, totalPages } = useAppSelector(
     (state) => state.characters,
   );
@@ -28,15 +29,15 @@ const Pagination: React.FC = () => {
 
   const handlePageChange = (page: number) => {
     dispatch(setCharacters({ characters: [], currentPage: page, totalPages }));
-    navigate(`/?page=${page}`);
+    router.push(`/?page=${page}&name=${router.query.name}`);
   };
 
   return (
-    <div className="pagination">
+    <div className={styles.pagination}>
       {currentPage > 1 && (
         <Link
-          to={`/?page=${currentPage - 1}`}
-          className="arrow-link"
+          href={`/?page=${currentPage - 1}&name=${router.query.name}`}
+          className={styles.arrowlink}
           onClick={() => handlePageChange(currentPage - 1)}
         >
           {'<'}
@@ -46,21 +47,21 @@ const Pagination: React.FC = () => {
       {startPage > 1 && (
         <>
           <Link
-            to={`/?page=1`}
-            className="link"
+            href={`/?page=1&name=${router.query.name}`}
+            className={styles.link}
             onClick={() => handlePageChange(1)}
           >
             1
           </Link>
-          {startPage > 2 && <span className="dots">...</span>}
+          {startPage > 2 && <span className={styles.dots}>...</span>}
         </>
       )}
 
       {pages.map((page) => (
         <Link
           key={page}
-          to={`/?page=${page}`}
-          className={page === currentPage ? 'activeLink' : 'link'}
+          href={`/?page=${page}&name=${router.query.name}`}
+          className={page === currentPage ? styles.activeLink : styles.link}
           onClick={() => handlePageChange(page)}
         >
           {page}
@@ -69,10 +70,10 @@ const Pagination: React.FC = () => {
 
       {endPage < totalPages && (
         <>
-          {endPage < totalPages - 1 && <span className="dots">...</span>}
+          {endPage < totalPages - 1 && <span className={styles.dots}>...</span>}
           <Link
-            to={`/?page=${totalPages}`}
-            className="link"
+            href={`/?page=${totalPages}&name=${router.query.name}`}
+            className={styles.link}
             onClick={() => handlePageChange(totalPages)}
           >
             {totalPages}
@@ -82,8 +83,8 @@ const Pagination: React.FC = () => {
 
       {currentPage < totalPages && (
         <Link
-          to={`/?page=${currentPage + 1}`}
-          className="arrow-link"
+          href={`/?page=${currentPage + 1}&name=${router.query.name}`}
+          className={styles.arrowlink}
           onClick={() => handlePageChange(currentPage + 1)}
         >
           {'>'}
