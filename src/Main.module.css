@@ -1,0 +1,47 @@
+.mainContainer {
+  display: flex;
+  width: 90vw;
+  flex-direction: column;
+  background-color: var(--bg-color);
+}
+.navigation {
+  display: flex;
+  justify-content: space-around;
+  border-inline: 10px solid var(--border-color);
+  border-top: 10px solid var(--border-color);
+}
+.forms {
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+}
+.section {
+  width: 50%;
+  min-width: 100px;
+  border: 10px solid var(--border-color);
+}
+.tilesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 10px;
+}
+.tile {
+  width: 44%;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: var(--component-color);
+  transition: border-color 0.3s;
+}
+.newTile {
+  border: 2px solid transparent;
+  animation: highlightBorder 2s ease-out forwards;
+}
+@keyframes highlightBorder {
+  0% {
+    border-color: var(--border-color);
+  }
+  100% {
+    border-color: transparent;
+  }
+}
